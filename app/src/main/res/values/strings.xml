@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Insider</string>
+
+    <string name="label_groups">Groups</string>
 </resources>

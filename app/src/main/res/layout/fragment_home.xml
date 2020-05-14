@@ -1,11 +1,64 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/color_background"
         android:clickable="true"
         android:focusable="true">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_home_banners"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="H,2:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tool:listitem="@layout/layout_banner_item" />
+
+        <ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
+            android:id="@+id/indicator_banners"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dimen_8dp"
+            android:overScrollMode="never"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recycler_home_banners"
+            app:spi_dotColor="@color/colorAccent"
+            app:spi_dotSelectedColor="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/txt_title_groups"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_default_margin"
+            android:layout_marginTop="@dimen/dimen_32dp"
+            android:text="@string/label_groups"
+            android:textAllCaps="true"
+            android:textColor="@color/color_primary_text"
+            android:textSize="@dimen/dimen_20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/indicator_banners" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_home_groups"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:padding="@dimen/dimen_8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_title_groups"
+            tool:listitem="@layout/layout_group_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

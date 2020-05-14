@@ -50,13 +50,7 @@ data class SubData(
     val _id: String?,
     val name: String?,
     val icon: String?,
-    val details: DisplayDetails?,
     val slug: String?
-)
-
-data class DisplayDetails(
-    val title: String?,
-    val description: String?
 )
 
 data class Stats(
@@ -117,13 +111,7 @@ fun JsonObject.parseSubData(): SubData = SubData(
     _id = getAsString("_id"),
     name = getAsString("name"),
     icon = getAsString("icon_img"),
-    details = getAsJsonObject("display_details")?.parseDisplayDetails(),
     slug = getAsString("slug")
-)
-
-fun JsonObject.parseDisplayDetails(): DisplayDetails = DisplayDetails(
-    title = getAsString("seo_title"),
-    description = getAsString("seo_description")
 )
 
 fun JsonArray.parseApplicableFilters(): List<String> = mapNotNull { it?.asString }

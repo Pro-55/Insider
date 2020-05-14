@@ -14,9 +14,32 @@ data class Banner(
     val group: SubData?,
     val mapLink: String?,
     val verticalCover: String?,
-    val priority: Int?,
-    val details: DisplayDetails?
-)
+    val priority: Int?
+) {
+    override fun equals(other: Any?): Boolean {
+        if (javaClass != other?.javaClass) return false
+        other as Banner?
+
+        if (_id != other._id) return false
+        if (name != other.name) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = _id?.hashCode() ?: 0
+        result = 31 * result + (isInternal?.hashCode() ?: 0)
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (type?.hashCode() ?: 0)
+        result = 31 * result + (category?.hashCode() ?: 0)
+        result = 31 * result + (group?.hashCode() ?: 0)
+        result = 31 * result + (mapLink?.hashCode() ?: 0)
+        result = 31 * result + (verticalCover?.hashCode() ?: 0)
+        result = 31 * result + (priority ?: 0)
+        return result
+    }
+
+}
 
 fun JsonArray.parseBanners(): List<Banner> = mapNotNull {
     val banner = it?.asJsonObject
@@ -29,7 +52,6 @@ fun JsonArray.parseBanners(): List<Banner> = mapNotNull {
         group = banner?.getAsJsonObject("group_id")?.parseSubData(),
         mapLink = banner?.getAsString("map_link"),
         verticalCover = banner?.getAsString("vertical_cover_image"),
-        priority = banner?.getAsInt("priority"),
-        details = banner?.getAsJsonObject("display_details")?.parseDisplayDetails()
+        priority = banner?.getAsInt("priority")
     )
 }

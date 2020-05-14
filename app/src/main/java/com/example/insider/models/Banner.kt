@@ -9,7 +9,6 @@ data class Banner(
     val _id: String?,
     val isInternal: Boolean?,
     val name: String?,
-    val type: String?,
     val category: SubData?,
     val group: SubData?,
     val mapLink: String?,
@@ -30,7 +29,6 @@ data class Banner(
         var result = _id?.hashCode() ?: 0
         result = 31 * result + (isInternal?.hashCode() ?: 0)
         result = 31 * result + (name?.hashCode() ?: 0)
-        result = 31 * result + (type?.hashCode() ?: 0)
         result = 31 * result + (category?.hashCode() ?: 0)
         result = 31 * result + (group?.hashCode() ?: 0)
         result = 31 * result + (mapLink?.hashCode() ?: 0)
@@ -47,7 +45,6 @@ fun JsonArray.parseBanners(): List<Banner> = mapNotNull {
         _id = banner?.getAsString("_id"),
         isInternal = banner?.getAsBoolean("is_internal"),
         name = banner?.getAsString("name"),
-        type = banner?.getAsString("type"),
         category = banner?.getAsJsonObject("category_id")?.parseSubData(),
         group = banner?.getAsJsonObject("group_id")?.parseSubData(),
         mapLink = banner?.getAsString("map_link"),

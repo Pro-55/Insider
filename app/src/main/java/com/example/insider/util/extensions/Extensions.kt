@@ -27,3 +27,8 @@ fun FragmentActivity.showKeyboard(view: View) {
 inline fun <reified T : ViewModel> FragmentActivity.getViewModel(
     factory: ViewModelProvider.Factory
 ): T = ViewModelProvider(this, factory).get(T::class.java)
+
+fun String.deQuoteString(): String {
+    val regex = "\""
+    return removePrefix(regex).removeSuffix(regex).trim()
+}

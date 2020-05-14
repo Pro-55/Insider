@@ -7,7 +7,7 @@ import com.google.gson.JsonObject
 data class Data(
     val tags: List<String>,
     val groups: List<String>,
-    val filters: Filters?,
+    val filters: List<Filter>,
     val sorters: Sorters?,
     val lists: Lists?,
     val picks: Picks?,
@@ -16,12 +16,24 @@ data class Data(
     val featured: List<Event>,
     val dates: List<CustomDate>,
     val banners: List<Banner>
-)
+) {
+
+    fun getBannersHome(): List<Banner> =
+        banners.filter { it.group?.name?.contains("home", true) == true }
+
+    fun getBannersFor(key: String): List<Banner> = banners.filter { it.group?.name == key }
+
+    fun getShowsFor(key: String): List<Show>? = filters.find { f -> f.key == key }?.shows
+        ?.map { s ->
+            val x = dates.find { d -> d.title == "${s.key}_date_string" }
+            s.copy(customDate = x)
+        }
+}
 
 fun JsonObject.parseData() = Data(
     tags = getAsJsonArray("tags")?.parseTags() ?: listOf(),
     groups = getAsJsonArray("groups")?.parseGroups() ?: listOf(),
-    filters = getAsJsonObject("filters")?.parseFilters(),
+    filters = getAsJsonObject("filters")?.parseFilters() ?: listOf(),
     sorters = getAsJsonObject("sorters")?.parseSorters(),
     lists = getAsJsonObject("list")?.parseLists(),
     picks = getAsJsonObject("picks")?.parsePicks(),

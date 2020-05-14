@@ -11,6 +11,8 @@ import kotlinx.android.synthetic.main.layout_group_item.view.*
 
 class GroupAdapter : ListAdapter<String, GroupAdapter.ViewHolder>(StringDC()) {
 
+    var listener: Listener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_group_item, parent, false)
@@ -27,7 +29,7 @@ class GroupAdapter : ListAdapter<String, GroupAdapter.ViewHolder>(StringDC()) {
 
             btn_group.text = group
 
-            btn_group.setOnClickListener { }
+            btn_group.setOnClickListener { listener?.onClick(group) }
         }
     }
 
@@ -42,4 +44,9 @@ class GroupAdapter : ListAdapter<String, GroupAdapter.ViewHolder>(StringDC()) {
             newItem: String
         ): Boolean = oldItem == newItem
     }
+
+    interface Listener {
+        fun onClick(group: String?)
+    }
+
 }

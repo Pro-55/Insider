@@ -2,4 +2,8 @@
     <string name="app_name">Insider</string>
 
     <string name="label_groups">Groups</string>
+    <string name="label_reset">Reset</string>
+    <string name="label_done">Done</string>
+    <string name="label_filter">Filter</string>
+    <string name="label_this_week">This Week</string>
 </resources>

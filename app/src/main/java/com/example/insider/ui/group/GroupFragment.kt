@@ -1,4 +1,4 @@
-package com.example.insider.ui.home
+package com.example.insider.ui.group
 
 import android.content.Intent
 import android.net.Uri
@@ -8,59 +8,98 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.example.insider.BaseFragment
 import com.example.insider.R
-import com.example.insider.databinding.FragmentHomeBinding
+import com.example.insider.databinding.FragmentGroupBinding
 import com.example.insider.models.Data
 import com.example.insider.models.Resource
+import com.example.insider.models.Show
 import com.example.insider.models.Status
 import com.example.insider.ui.HomeViewModel
+import com.example.insider.ui.filter.ShowAdapter
+import com.example.insider.ui.home.BannerAdapter
 import com.example.insider.util.Constants
 import com.example.insider.util.CustomTabHelper
-import com.example.insider.util.extensions.getViewModel
-import com.example.insider.util.extensions.glide
-import com.example.insider.util.extensions.showShortSnackBar
-import com.example.insider.util.extensions.visible
+import com.example.insider.util.extensions.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import javax.inject.Inject
 
-class HomeFragment : BaseFragment() {
+class GroupFragment : BaseFragment() {
 
     companion object {
-        private val TAG = HomeFragment::class.java.simpleName
+        private val TAG = GroupFragment::class.java.simpleName
     }
 
     //Global
     @Inject lateinit var factory: ViewModelProvider.Factory
-    private lateinit var binding: FragmentHomeBinding
+    private lateinit var binding: FragmentGroupBinding
+    private val args by navArgs<GroupFragmentArgs>()
     private val viewModel by lazy { requireActivity().getViewModel<HomeViewModel>(factory) }
     private var bannerAdapter: BannerAdapter? = null
-    private var groupAdapter: GroupAdapter? = null
+    private var showAdapter: ShowAdapter? = null
+    private var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_group, container, false)
+
+        binding.txtTitle.text = args.group
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setClickListener()
+
+        setupBottomSheet()
+
         setupBannerRecycler()
 
-        setupGroupRecycler()
+        setupWeekRecycler()
 
         viewModel.data.observe(viewLifecycleOwner, Observer { bindData(it) })
 
+    }
+
+    private fun setClickListener() {
+
+        binding.imgBtnBack.setOnClickListener { onBackPressed() }
+
+        binding.fabFilterList.setOnClickListener { extendBottomSheet() }
+
+        binding.viewBlur.setOnClickListener { hideBottomSheet() }
+
+        binding.txtBtnReset.setOnClickListener { hideBottomSheet() }
+
+        binding.txtBtnDone.setOnClickListener { hideBottomSheet() }
+    }
+
+    private fun setupBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetFilters)
+        hideBottomSheet()
+        bottomSheetBehavior?.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED)
+                    binding.viewBlur.apply { goneWithFade(parent as ViewGroup) }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
     }
 
     private fun setupBannerRecycler() {
@@ -78,19 +117,15 @@ class HomeFragment : BaseFragment() {
         binding.indicatorBanners.attachToRecyclerView(binding.recyclerBanners)
     }
 
-    private fun setupGroupRecycler() {
-        groupAdapter = GroupAdapter()
-        groupAdapter?.listener = object : GroupAdapter.Listener {
-            override fun onClick(group: String?) {
-                if (group != null) {
-                    val action = HomeFragmentDirections.navigateHomeToGroup(group)
-                    findNavController().navigate(action)
-                }
+    private fun setupWeekRecycler() {
+        showAdapter = ShowAdapter()
+        showAdapter?.listener = object : ShowAdapter.Listener {
+            override fun onClick(show: Show) {
+                Log.d(TAG, "TestLog: s:$show")
             }
         }
-        binding.recyclerHomeGroups.layoutManager =
-            LinearLayoutManager(requireContext(), HORIZONTAL, false)
-        binding.recyclerHomeGroups.adapter = groupAdapter
+        binding.recyclerWeek.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.recyclerWeek.adapter = showAdapter
     }
 
     private fun bindData(resource: Resource<Data>) {
@@ -98,23 +133,31 @@ class HomeFragment : BaseFragment() {
             Status.LOADING -> Unit
             Status.SUCCESS -> {
                 val data = resource.data ?: return
+                val group = args.group
 
-                val banners = data.getBannersHome()
+                val banners = data.getBannersFor(group)
                 if (banners.isNotEmpty()) {
                     binding.recyclerBanners.visible()
                     binding.indicatorBanners.visible()
                     bannerAdapter?.swapData(banners)
                 }
 
-                val groups = data.groups
-                if (banners.isNotEmpty()) {
-                    binding.txtTitleGroups.visible()
-                    binding.recyclerHomeGroups.visible()
-                    groupAdapter?.swapData(groups)
-                }
+                val weekShows = data.getShowsFor(group) ?: listOf()
+                showAdapter?.swapData(weekShows)
+
             }
             Status.ERROR -> Log.d(TAG, "TestLog: ${resource.status}: ${resource.message}")
         }
+    }
+
+    private fun extendBottomSheet() {
+        binding.viewBlur.apply { visibleWithFade(parent as ViewGroup) }
+        bottomSheetBehavior?.expand()
+    }
+
+    private fun hideBottomSheet() {
+        binding.viewBlur.apply { goneWithFade(parent as ViewGroup) }
+        bottomSheetBehavior?.hide()
     }
 
     private fun openLink(uri: Uri) {

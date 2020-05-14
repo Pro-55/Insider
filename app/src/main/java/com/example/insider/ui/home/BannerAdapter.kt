@@ -53,4 +53,5 @@ class BannerAdapter(private val glide: RequestManager) :
     interface Listener {
         fun onClick(link: String?)
     }
+
 }

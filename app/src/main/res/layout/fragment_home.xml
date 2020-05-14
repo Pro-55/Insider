@@ -10,9 +10,10 @@
         android:focusable="true">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_home_banners"
+            android:id="@+id/recycler_banners"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintDimensionRatio="H,2:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,12 +27,20 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/dimen_8dp"
             android:overScrollMode="never"
+            android:visibility="gone"
             app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recycler_home_banners"
+            app:layout_constraintTop_toBottomOf="@id/recycler_banners"
             app:spi_dotColor="@color/colorAccent"
             app:spi_dotSelectedColor="@color/colorAccent" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_banners"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="recycler_banners,indicator_banners" />
 
         <TextView
             android:id="@+id/txt_title_groups"
@@ -44,10 +53,11 @@
             android:textColor="@color/color_primary_text"
             android:textSize="@dimen/dimen_20sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/indicator_banners" />
+            app:layout_constraintTop_toBottomOf="@id/barrier_banners" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_home_groups"
@@ -55,6 +65,7 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:padding="@dimen/dimen_8dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_title_groups"

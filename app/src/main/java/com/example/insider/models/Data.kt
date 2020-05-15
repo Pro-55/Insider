@@ -19,9 +19,10 @@ data class Data(
 ) {
 
     fun getBannersHome(): List<Banner> =
-        banners.filter { b -> b.group?.name?.contains("home", true) == true }
+        banners.mapNotNull { b -> if (b.group?.name?.contains("home", true) == true) b else null }
 
-    fun getBannersFor(key: String): List<Banner> = banners.filter { b -> b.group?.name == key }
+    fun getBannersFor(key: String): List<Banner> =
+        banners.mapNotNull { b -> if (b.group?.name == key) b else null }
 
     fun getShowsFor(key: String): List<Show>? = filters.find { f -> f.key == key }?.shows
         ?.map { s ->
@@ -30,6 +31,12 @@ data class Data(
         }
 
     fun getSortsFor(key: String): List<Sort>? = sorters.find { s -> s.key == key }?.sorts
+
+    fun getGroupedListFor(key: String): List<Event>? {
+        val k = lists?.groups?.find { g -> g.key == key }?.value
+        return lists?.masterList?.mapNotNull { e -> if (k?.contains(e.slug) == true) e else null }
+    }
+
 }
 
 fun JsonObject.parseData() = Data(

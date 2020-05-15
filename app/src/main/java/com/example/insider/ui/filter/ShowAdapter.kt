@@ -48,6 +48,11 @@ class ShowAdapter : RecyclerView.Adapter<ShowAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
+    fun resetSelection() {
+        selectedIndex = -1
+        notifyDataSetChanged()
+    }
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     interface Listener {

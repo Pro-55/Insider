@@ -1,5 +1,6 @@
 package com.example.insider.models
 
+import com.example.insider.util.extensions.deQuoteString
 import com.google.gson.JsonObject
 
 data class Lists(
@@ -9,13 +10,13 @@ data class Lists(
 )
 
 data class Group(
-    val title: String,
-    val items: List<String>
+    val key: String,
+    val value: List<String>
 )
 
 data class Category(
-    val title: String,
-    val items: List<String>
+    val key: String,
+    val value: List<String>
 )
 
 fun JsonObject.parseLists(): Lists = Lists(
@@ -25,11 +26,11 @@ fun JsonObject.parseLists(): Lists = Lists(
 )
 
 fun JsonObject.parseGroups(): List<Group>? = keySet()?.mapNotNull { title ->
-    val list = getAsJsonArray(title)?.mapNotNull { it.toString() } ?: listOf()
+    val list = getAsJsonArray(title)?.mapNotNull { it?.asString?.deQuoteString() } ?: listOf()
     Group(title, list)
 }
 
 fun JsonObject.parseCategories(): List<Category>? = keySet()?.mapNotNull { title ->
-    val list = getAsJsonArray(title)?.mapNotNull { it.toString() } ?: listOf()
+    val list = getAsJsonArray(title)?.mapNotNull { it?.asString?.deQuoteString() } ?: listOf()
     Category(title, list)
 }

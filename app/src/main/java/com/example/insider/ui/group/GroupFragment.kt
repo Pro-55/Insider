@@ -45,8 +45,11 @@ class GroupFragment : BaseFragment() {
     private val viewModel by lazy { requireActivity().getViewModel<HomeViewModel>(factory) }
     private var bannerAdapter: BannerAdapter? = null
     private var showAdapter: ShowAdapter? = null
+    private var eventAdapter: EventAdapter? = null
     private var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
+    private var events: List<Event>? = null
     private var sorts: List<Sort>? = null
+    private var filter = Pair<Int, Show?>(0, null)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,6 +72,8 @@ class GroupFragment : BaseFragment() {
 
         setupBannerRecycler()
 
+        setupEventsRecycler()
+
         setupSortSpinner()
 
         setupWeekRecycler()
@@ -85,7 +90,7 @@ class GroupFragment : BaseFragment() {
 
         binding.viewBlur.setOnClickListener { hideBottomSheet() }
 
-        binding.txtBtnReset.setOnClickListener { hideBottomSheet() }
+        binding.txtBtnReset.setOnClickListener { resetFilters() }
 
         binding.txtBtnDone.setOnClickListener { hideBottomSheet() }
 
@@ -120,25 +125,38 @@ class GroupFragment : BaseFragment() {
         binding.indicatorBanners.attachToRecyclerView(binding.recyclerBanners)
     }
 
+    private fun setupSortSpinner() {
+        binding.spinnerSorts.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p: AdapterView<*>?, v: View?, index: Int, id: Long) {
+                filter = filter.copy(first = index)
+                filterList()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
     private fun setupWeekRecycler() {
         showAdapter = ShowAdapter()
         showAdapter?.listener = object : ShowAdapter.Listener {
             override fun onClick(show: Show) {
-                Log.d(TAG, "TestLog: s:$show")
+                filter = filter.copy(second = show)
+                filterList()
             }
         }
         binding.recyclerShows.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerShows.adapter = showAdapter
     }
 
-    private fun setupSortSpinner() {
-        binding.spinnerSorts.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p: AdapterView<*>?, v: View?, index: Int, id: Long) {
-                sorts?.get(index)?.let { sort -> Log.d(TAG, "TestLog: s:$sort") }
+    private fun setupEventsRecycler() {
+        eventAdapter = EventAdapter(glide())
+        eventAdapter?.listener = object : EventAdapter.Listener {
+            override fun onClick(event: Event) {
+                Log.d(TAG, "TestLog: e:$event")
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+        binding.recyclerList.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerList.adapter = eventAdapter
     }
 
     private fun bindData(resource: Resource<Data>) {
@@ -155,8 +173,10 @@ class GroupFragment : BaseFragment() {
                     bannerAdapter?.swapData(banners)
                 }
 
-                sorts = data.getSortsFor(group)
+                events = data.getGroupedListFor(group)
+                if (!events.isNullOrEmpty()) filterList()
 
+                sorts = data.getSortsFor(group)
                 if (!sorts.isNullOrEmpty()) {
                     binding.txtSorts.visible()
                     binding.spinnerSorts.visible()
@@ -210,5 +230,35 @@ class GroupFragment : BaseFragment() {
             showShortSnackBar(Constants.REQUEST_FAILED_MESSAGE)
         }
     }
+
+    private fun resetFilters() {
+        filter = Pair(0, null)
+        showAdapter?.resetSelection()
+        val count = binding.spinnerSorts.adapter?.count ?: -1
+        if (count <= 0) filterList() else binding.spinnerSorts.setSelection(0)
+    }
+
+    private fun filterList() {
+        if (events.isNullOrEmpty() || eventAdapter == null) return
+        val sort = if (!sorts.isNullOrEmpty()) sorts?.get(filter.first) else null
+        val show = filter.second
+        val filteredList = if (show != null)
+            events!!.mapNotNull { e -> if (e.applicableFilters?.contains(show.key) == true) e else null }
+        else
+            events!!
+
+        val sortedList = when (sort?.type) {
+            "asc" -> sortAsc(sort.key, filteredList)
+            "desc" -> sortDese(sort.key, filteredList)
+            else -> filteredList
+        }
+        eventAdapter?.swapData(sortedList)
+    }
+
+    private fun sortAsc(key: String, filteredList: List<Event>): List<Event> =
+        if (key == "min_price") filteredList.sortedBy { it.minPrice } else filteredList.sortedBy { it.startTime }
+
+    private fun sortDese(key: String, filteredList: List<Event>): List<Event> =
+        if (key == "min_price") filteredList.sortedByDescending { it.minPrice } else filteredList.sortedByDescending { it.startTime }
 
 }

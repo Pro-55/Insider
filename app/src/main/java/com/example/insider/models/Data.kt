@@ -8,7 +8,7 @@ data class Data(
     val tags: List<String>,
     val groups: List<String>,
     val filters: List<Filter>,
-    val sorters: Sorters?,
+    val sorters: List<Sorter>,
     val lists: Lists?,
     val picks: Picks?,
     val populars: List<Event>,
@@ -19,22 +19,24 @@ data class Data(
 ) {
 
     fun getBannersHome(): List<Banner> =
-        banners.filter { it.group?.name?.contains("home", true) == true }
+        banners.filter { b -> b.group?.name?.contains("home", true) == true }
 
-    fun getBannersFor(key: String): List<Banner> = banners.filter { it.group?.name == key }
+    fun getBannersFor(key: String): List<Banner> = banners.filter { b -> b.group?.name == key }
 
     fun getShowsFor(key: String): List<Show>? = filters.find { f -> f.key == key }?.shows
         ?.map { s ->
             val x = dates.find { d -> d.title == "${s.key}_date_string" }
             s.copy(customDate = x)
         }
+
+    fun getSortsFor(key: String): List<Sort>? = sorters.find { s -> s.key == key }?.sorts
 }
 
 fun JsonObject.parseData() = Data(
     tags = getAsJsonArray("tags")?.parseTags() ?: listOf(),
     groups = getAsJsonArray("groups")?.parseGroups() ?: listOf(),
     filters = getAsJsonObject("filters")?.parseFilters() ?: listOf(),
-    sorters = getAsJsonObject("sorters")?.parseSorters(),
+    sorters = getAsJsonObject("sorters")?.parseSorters() ?: listOf(),
     lists = getAsJsonObject("list")?.parseLists(),
     picks = getAsJsonObject("picks")?.parsePicks(),
     populars = getAsJsonArray("popular")?.parsePopulars() ?: listOf(),

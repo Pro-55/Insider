@@ -111,7 +111,9 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
+            android:paddingBottom="@dimen/activity_default_margin"
             app:behavior_peekHeight="0dp"
+            app:behavior_skipCollapsed="true"
             app:layout_behavior="@string/bottom_sheet_behavior">
 
             <TextView
@@ -167,24 +169,57 @@
                 app:constraint_referenced_ids="txt_btn_reset,txt_filter,txt_btn_done" />
 
             <TextView
-                android:id="@+id/txt_filter_day"
+                android:id="@+id/txt_sorts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_default_margin"
-                android:text="@string/label_this_week"
+                android:text="@string/label_sort_by"
                 android:textAllCaps="true"
                 android:textColor="@color/color_secondary_text"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/barrier_filter_title" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_week"
+            <Spinner
+                android:id="@+id/spinner_sorts"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dimen_8dp"
+                android:layout_marginTop="@dimen/activity_default_margin"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_filter_day" />
+                app:layout_constraintTop_toBottomOf="@id/txt_sorts" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier_sorts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="txt_sorts,spinner_sorts" />
+
+            <TextView
+                android:id="@+id/txt_shows"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_default_margin"
+                android:text="@string/label_shows"
+                android:textAllCaps="true"
+                android:textColor="@color/color_secondary_text"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/barrier_sorts" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_shows"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dimen_8dp"
+                android:layout_marginTop="@dimen/dimen_8dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txt_shows" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

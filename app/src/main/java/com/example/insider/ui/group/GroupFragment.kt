@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
@@ -20,10 +22,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import com.example.insider.BaseFragment
 import com.example.insider.R
 import com.example.insider.databinding.FragmentGroupBinding
-import com.example.insider.models.Data
-import com.example.insider.models.Resource
-import com.example.insider.models.Show
-import com.example.insider.models.Status
+import com.example.insider.models.*
 import com.example.insider.ui.HomeViewModel
 import com.example.insider.ui.filter.ShowAdapter
 import com.example.insider.ui.home.BannerAdapter
@@ -47,6 +46,7 @@ class GroupFragment : BaseFragment() {
     private var bannerAdapter: BannerAdapter? = null
     private var showAdapter: ShowAdapter? = null
     private var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
+    private var sorts: List<Sort>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,6 +69,8 @@ class GroupFragment : BaseFragment() {
 
         setupBannerRecycler()
 
+        setupSortSpinner()
+
         setupWeekRecycler()
 
         viewModel.data.observe(viewLifecycleOwner, Observer { bindData(it) })
@@ -86,6 +88,7 @@ class GroupFragment : BaseFragment() {
         binding.txtBtnReset.setOnClickListener { hideBottomSheet() }
 
         binding.txtBtnDone.setOnClickListener { hideBottomSheet() }
+
     }
 
     private fun setupBottomSheet() {
@@ -94,7 +97,7 @@ class GroupFragment : BaseFragment() {
         bottomSheetBehavior?.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_COLLAPSED)
+                if (newState == BottomSheetBehavior.STATE_HIDDEN)
                     binding.viewBlur.apply { goneWithFade(parent as ViewGroup) }
             }
 
@@ -124,8 +127,18 @@ class GroupFragment : BaseFragment() {
                 Log.d(TAG, "TestLog: s:$show")
             }
         }
-        binding.recyclerWeek.layoutManager = GridLayoutManager(requireContext(), 3)
-        binding.recyclerWeek.adapter = showAdapter
+        binding.recyclerShows.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.recyclerShows.adapter = showAdapter
+    }
+
+    private fun setupSortSpinner() {
+        binding.spinnerSorts.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p: AdapterView<*>?, v: View?, index: Int, id: Long) {
+                sorts?.get(index)?.let { sort -> Log.d(TAG, "TestLog: s:$sort") }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
     }
 
     private fun bindData(resource: Resource<Data>) {
@@ -142,8 +155,23 @@ class GroupFragment : BaseFragment() {
                     bannerAdapter?.swapData(banners)
                 }
 
-                val weekShows = data.getShowsFor(group) ?: listOf()
-                showAdapter?.swapData(weekShows)
+                sorts = data.getSortsFor(group)
+
+                if (!sorts.isNullOrEmpty()) {
+                    binding.txtSorts.visible()
+                    binding.spinnerSorts.visible()
+                    val items = sorts!!.map { s -> s.display }
+                    binding.spinnerSorts.adapter =
+                        ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, items)
+                            .apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+                }
+
+                val shows = data.getShowsFor(group)
+                if (!shows.isNullOrEmpty()) {
+                    binding.txtShows.visible()
+                    binding.recyclerShows.visible()
+                    showAdapter?.swapData(shows)
+                }
 
             }
             Status.ERROR -> Log.d(TAG, "TestLog: ${resource.status}: ${resource.message}")

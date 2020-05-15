@@ -11,12 +11,12 @@ data class Lists(
 
 data class Group(
     val key: String,
-    val value: List<String>
+    val value: List<String>?
 )
 
 data class Category(
     val key: String,
-    val value: List<String>
+    val value: List<String>?
 )
 
 fun JsonObject.parseLists(): Lists = Lists(
@@ -26,11 +26,9 @@ fun JsonObject.parseLists(): Lists = Lists(
 )
 
 fun JsonObject.parseGroups(): List<Group>? = keySet()?.mapNotNull { title ->
-    val list = getAsJsonArray(title)?.mapNotNull { it?.asString?.deQuoteString() } ?: listOf()
-    Group(title, list)
+    Group(title, getAsJsonArray(title)?.mapNotNull { it?.asString?.deQuoteString() })
 }
 
 fun JsonObject.parseCategories(): List<Category>? = keySet()?.mapNotNull { title ->
-    val list = getAsJsonArray(title)?.mapNotNull { it?.asString?.deQuoteString() } ?: listOf()
-    Category(title, list)
+    Category(title, getAsJsonArray(title)?.mapNotNull { it?.asString?.deQuoteString() })
 }

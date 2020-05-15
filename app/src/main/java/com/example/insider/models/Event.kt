@@ -9,11 +9,9 @@ data class Event(
     val _id: String?,
     val startTime: Long?,
     val name: String?,
-    val type: String?,
     val slug: String?,
     val horizontalCover: String?,
     val verticalCover: String?,
-    val tags: List<Tag>?,
     val city: String?,
     val venueId: String?,
     val venueName: String?,
@@ -25,11 +23,8 @@ data class Event(
     val eventState: String?,
     val price: String?,
     val communicationStrategy: String?,
-    val model: String?,
     val applicableFilters: List<String>?,
     val popularityScore: Float?,
-    val favStats: Stats?,
-    val purchaseVisibility: String?,
     val minPrice: Int?
 ) {
     fun getDisplayPrice(): String {
@@ -37,16 +32,6 @@ data class Event(
         return if (price.contains("free", true)) price else "${Constants.RUPEE_SYMBOL}$price"
     }
 }
-
-data class Tag(
-    val _id: String?,
-    val tagId: String?,
-    val priority: Int?,
-    val isFeatured: Boolean?,
-    val isCarousel: Boolean?,
-    val isPick: Boolean?,
-    val isPrimaryInterest: Boolean?
-)
 
 data class Location(
     val latitude: Double,
@@ -60,23 +45,15 @@ data class SubData(
     val slug: String?
 )
 
-data class Stats(
-    val _id: String?,
-    val actualCount: Int?,
-    val prettyCount: Int?
-)
-
 fun JsonObject.parseEventsMasterList(): List<Event>? = keySet()?.mapNotNull {
     val event = getAsJsonObject(it)
     Event(
         _id = event?.getAsString("_id"),
         startTime = event?.getAsLong("min_show_start_time"),
         name = event?.getAsString("name"),
-        type = event?.getAsString("type"),
         slug = event?.getAsString("slug"),
         horizontalCover = event?.getAsString("horizontal_cover_image"),
         verticalCover = event?.getAsString("vertical_cover_image"),
-        tags = event?.getAsJsonArray("tags")?.parseEventTags(),
         city = event?.getAsString("city"),
         venueId = event?.getAsString("venue_id"),
         venueName = event?.getAsString("venue_name"),
@@ -88,25 +65,61 @@ fun JsonObject.parseEventsMasterList(): List<Event>? = keySet()?.mapNotNull {
         eventState = event?.getAsString("event_state"),
         price = event?.getAsString("price_display_string"),
         communicationStrategy = event?.getAsString("communication_strategy"),
-        model = event?.getAsString("model"),
         applicableFilters = event?.getAsJsonArray("applicable_filters")?.parseApplicableFilters(),
         popularityScore = event?.getAsFloat("popularity_score"),
-        favStats = event?.getAsJsonObject("favStats")?.parseStats(),
-        purchaseVisibility = event?.getAsString("purchase_visibility"),
         minPrice = event?.getAsInt("min_price")
     )
 }
 
-fun JsonArray.parseEventTags(): List<Tag> = mapNotNull {
-    val tag = it?.asJsonObject
-    Tag(
-        _id = tag?.getAsString("_id"),
-        tagId = tag?.getAsString("tag_id"),
-        priority = tag?.getAsInt("priority"),
-        isFeatured = tag?.getAsBoolean("is_featured"),
-        isCarousel = tag?.getAsBoolean("is_carousel"),
-        isPick = tag?.getAsBoolean("is_pick"),
-        isPrimaryInterest = tag?.getAsBoolean("is_primary_interest")
+fun JsonArray.parsePopulars(): List<Event> = mapNotNull {
+    val event = it?.asJsonObject
+    Event(
+        _id = event?.getAsString("_id"),
+        startTime = event?.getAsLong("min_show_start_time"),
+        name = event?.getAsString("name"),
+        slug = event?.getAsString("slug"),
+        horizontalCover = event?.getAsString("horizontal_cover_image"),
+        verticalCover = event?.getAsString("vertical_cover_image"),
+        city = event?.getAsString("city"),
+        venueId = event?.getAsString("venue_id"),
+        venueName = event?.getAsString("venue_name"),
+        venueDate = event?.getAsString("venue_date_string"),
+        venueLocation = event?.getAsJsonObject("venue_geolocation")?.parseLocation(),
+        isRsvp = event?.getAsBoolean("is_rsvp"),
+        category = event?.getAsJsonObject("category_id")?.parseSubData(),
+        group = event?.getAsJsonObject("group_id")?.parseSubData(),
+        eventState = event?.getAsString("event_state"),
+        price = event?.getAsString("price_display_string"),
+        communicationStrategy = event?.getAsString("communication_strategy"),
+        applicableFilters = event?.getAsJsonArray("applicable_filters")?.parseApplicableFilters(),
+        popularityScore = event?.getAsFloat("popularity_score"),
+        minPrice = event?.getAsInt("min_price")
+    )
+}
+
+fun JsonArray.parseFeatured(): List<Event> = mapNotNull {
+    val event = it?.asJsonObject
+    Event(
+        _id = event?.getAsString("_id"),
+        startTime = event?.getAsLong("min_show_start_time"),
+        name = event?.getAsString("name"),
+        slug = event?.getAsString("slug"),
+        horizontalCover = event?.getAsString("horizontal_cover_image"),
+        verticalCover = event?.getAsString("vertical_cover_image"),
+        city = event?.getAsString("city"),
+        venueId = event?.getAsString("venue_id"),
+        venueName = event?.getAsString("venue_name"),
+        venueDate = event?.getAsString("venue_date_string"),
+        venueLocation = event?.getAsJsonObject("venue_geolocation")?.parseLocation(),
+        isRsvp = event?.getAsBoolean("is_rsvp"),
+        category = event?.getAsJsonObject("category_id")?.parseSubData(),
+        group = event?.getAsJsonObject("group_id")?.parseSubData(),
+        eventState = event?.getAsString("event_state"),
+        price = event?.getAsString("price_display_string"),
+        communicationStrategy = event?.getAsString("communication_strategy"),
+        applicableFilters = event?.getAsJsonArray("applicable_filters")?.parseApplicableFilters(),
+        popularityScore = event?.getAsFloat("popularity_score"),
+        minPrice = event?.getAsInt("min_price")
     )
 }
 
@@ -123,71 +136,3 @@ fun JsonObject.parseSubData(): SubData = SubData(
 )
 
 fun JsonArray.parseApplicableFilters(): List<String> = mapNotNull { it?.asString }
-
-fun JsonObject.parseStats(): Stats = Stats(
-    _id = getAsString("target_id"),
-    actualCount = getAsInt("actualCount"),
-    prettyCount = getAsInt("prettyCount")
-)
-
-fun JsonArray.parsePopulars(): List<Event> = mapNotNull {
-    val event = it?.asJsonObject
-    Event(
-        _id = event?.getAsString("_id"),
-        startTime = event?.getAsLong("min_show_start_time"),
-        name = event?.getAsString("name"),
-        type = event?.getAsString("type"),
-        slug = event?.getAsString("slug"),
-        horizontalCover = event?.getAsString("horizontal_cover_image"),
-        verticalCover = event?.getAsString("vertical_cover_image"),
-        tags = event?.getAsJsonArray("tags")?.parseEventTags(),
-        city = event?.getAsString("city"),
-        venueId = event?.getAsString("venue_id"),
-        venueName = event?.getAsString("venue_name"),
-        venueDate = event?.getAsString("venue_date_string"),
-        venueLocation = event?.getAsJsonObject("venue_geolocation")?.parseLocation(),
-        isRsvp = event?.getAsBoolean("is_rsvp"),
-        category = event?.getAsJsonObject("category_id")?.parseSubData(),
-        group = event?.getAsJsonObject("group_id")?.parseSubData(),
-        eventState = event?.getAsString("event_state"),
-        price = event?.getAsString("price_display_string"),
-        communicationStrategy = event?.getAsString("communication_strategy"),
-        model = event?.getAsString("model"),
-        applicableFilters = event?.getAsJsonArray("applicable_filters")?.parseApplicableFilters(),
-        popularityScore = event?.getAsFloat("popularity_score"),
-        favStats = event?.getAsJsonObject("favStats")?.parseStats(),
-        purchaseVisibility = event?.getAsString("purchase_visibility"),
-        minPrice = event?.getAsInt("min_price")
-    )
-}
-
-fun JsonArray.parseFeatured(): List<Event> = mapNotNull {
-    val event = it?.asJsonObject
-    Event(
-        _id = event?.getAsString("_id"),
-        startTime = event?.getAsLong("min_show_start_time"),
-        name = event?.getAsString("name"),
-        type = event?.getAsString("type"),
-        slug = event?.getAsString("slug"),
-        horizontalCover = event?.getAsString("horizontal_cover_image"),
-        verticalCover = event?.getAsString("vertical_cover_image"),
-        tags = event?.getAsJsonArray("tags")?.parseEventTags(),
-        city = event?.getAsString("city"),
-        venueId = event?.getAsString("venue_id"),
-        venueName = event?.getAsString("venue_name"),
-        venueDate = event?.getAsString("venue_date_string"),
-        venueLocation = event?.getAsJsonObject("venue_geolocation")?.parseLocation(),
-        isRsvp = event?.getAsBoolean("is_rsvp"),
-        category = event?.getAsJsonObject("category_id")?.parseSubData(),
-        group = event?.getAsJsonObject("group_id")?.parseSubData(),
-        eventState = event?.getAsString("event_state"),
-        price = event?.getAsString("price_display_string"),
-        communicationStrategy = event?.getAsString("communication_strategy"),
-        model = event?.getAsString("model"),
-        applicableFilters = event?.getAsJsonArray("applicable_filters")?.parseApplicableFilters(),
-        popularityScore = event?.getAsFloat("popularity_score"),
-        favStats = event?.getAsJsonObject("favStats")?.parseStats(),
-        purchaseVisibility = event?.getAsString("purchase_visibility"),
-        minPrice = event?.getAsInt("min_price")
-    )
-}

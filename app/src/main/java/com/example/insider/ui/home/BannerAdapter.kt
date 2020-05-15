@@ -30,7 +30,7 @@ class BannerAdapter(private val glide: RequestManager) :
 
         fun bind(banner: Banner) = with(itemView) {
 
-            glide.load(banner.verticalCover)
+            glide.load(banner.cover)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(img_banner)
 

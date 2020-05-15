@@ -167,7 +167,7 @@ class GroupFragment : BaseFragment() {
                 val group = args.group
 
                 val banners = data.getBannersFor(group)
-                if (banners.isNotEmpty()) {
+                if (!banners.isNullOrEmpty()) {
                     binding.recyclerBanners.visible()
                     binding.indicatorBanners.visible()
                     bannerAdapter?.swapData(banners)
@@ -255,10 +255,10 @@ class GroupFragment : BaseFragment() {
         eventAdapter?.swapData(sortedList)
     }
 
-    private fun sortAsc(key: String, filteredList: List<Event>): List<Event> =
+    private fun sortAsc(key: String?, filteredList: List<Event>): List<Event> =
         if (key == "min_price") filteredList.sortedBy { it.minPrice } else filteredList.sortedBy { it.startTime }
 
-    private fun sortDese(key: String, filteredList: List<Event>): List<Event> =
+    private fun sortDese(key: String?, filteredList: List<Event>): List<Event> =
         if (key == "min_price") filteredList.sortedByDescending { it.minPrice } else filteredList.sortedByDescending { it.startTime }
 
 }

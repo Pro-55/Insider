@@ -10,9 +10,7 @@ import kotlinx.coroutines.flow.*
 fun <T> resourceFlow(
     doRetry: Boolean = true,
     block: suspend FlowCollector<Resource<T>>.() -> Unit
-): Flow<Resource<T>> {
-    return flow(block).asResourceFlow(doRetry)
-}
+): Flow<Resource<T>> = flow(block).asResourceFlow(doRetry)
 
 fun <T> Flow<Resource<T>>.asResourceFlow(doRetry: Boolean = true): Flow<Resource<T>> {
     return this

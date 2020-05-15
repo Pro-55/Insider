@@ -120,28 +120,28 @@ class HomeFragment : BaseFragment() {
                 val data = resource.data ?: return
 
                 val banners = data.getBannersHome()
-                if (banners.isNotEmpty()) {
+                if (!banners.isNullOrEmpty()) {
                     binding.recyclerBanners.visible()
                     binding.indicatorBanners.visible()
                     bannerAdapter?.swapData(banners)
                 }
 
                 val groups = data.groups
-                if (banners.isNotEmpty()) {
+                if (!groups.isNullOrEmpty()) {
                     binding.txtGroups.visible()
                     binding.recyclerGroups.visible()
                     groupAdapter?.swapData(groups)
                 }
 
                 val populars = data.getPopularsList()
-                if (populars.isNotEmpty()) {
+                if (!populars.isNullOrEmpty()) {
                     binding.txtPopular.visible()
                     binding.recyclerPopular.visible()
                     popularsAdapter?.swapData(populars)
                 }
 
                 val featured = data.featured
-                if (featured.isNotEmpty()) {
+                if (!featured.isNullOrEmpty()) {
                     binding.txtFeatured.visible()
                     binding.recyclerFeatured.visible()
                     featuredAdapter?.swapData(featured)

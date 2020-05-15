@@ -42,6 +42,8 @@ class HomeFragment : BaseFragment() {
     private val viewModel by lazy { requireActivity().getViewModel<HomeViewModel>(factory) }
     private var bannerAdapter: BannerAdapter? = null
     private var groupAdapter: GroupAdapter? = null
+    private var popularsAdapter: PopularsAdapter? = null
+    private var featuredAdapter: FeaturedAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,6 +60,10 @@ class HomeFragment : BaseFragment() {
         setupBannerRecycler()
 
         setupGroupRecycler()
+
+        setupPopularRecycler()
+
+        setupFeaturedRecycler()
 
         viewModel.data.observe(viewLifecycleOwner, Observer { bindData(it) })
 
@@ -88,9 +94,23 @@ class HomeFragment : BaseFragment() {
                 }
             }
         }
-        binding.recyclerHomeGroups.layoutManager =
+        binding.recyclerGroups.layoutManager =
             LinearLayoutManager(requireContext(), HORIZONTAL, false)
-        binding.recyclerHomeGroups.adapter = groupAdapter
+        binding.recyclerGroups.adapter = groupAdapter
+    }
+
+    private fun setupPopularRecycler() {
+        popularsAdapter = PopularsAdapter(glide())
+        binding.recyclerPopular.layoutManager =
+            LinearLayoutManager(requireContext(), HORIZONTAL, false)
+        binding.recyclerPopular.adapter = popularsAdapter
+    }
+
+    private fun setupFeaturedRecycler() {
+        featuredAdapter = FeaturedAdapter(glide())
+        binding.recyclerFeatured.layoutManager =
+            LinearLayoutManager(requireContext(), HORIZONTAL, false)
+        binding.recyclerFeatured.adapter = featuredAdapter
     }
 
     private fun bindData(resource: Resource<Data>) {
@@ -108,9 +128,23 @@ class HomeFragment : BaseFragment() {
 
                 val groups = data.groups
                 if (banners.isNotEmpty()) {
-                    binding.txtTitleGroups.visible()
-                    binding.recyclerHomeGroups.visible()
+                    binding.txtGroups.visible()
+                    binding.recyclerGroups.visible()
                     groupAdapter?.swapData(groups)
+                }
+
+                val populars = data.getPopularsList()
+                if (populars.isNotEmpty()) {
+                    binding.txtPopular.visible()
+                    binding.recyclerPopular.visible()
+                    popularsAdapter?.swapData(populars)
+                }
+
+                val featured = data.featured
+                if (featured.isNotEmpty()) {
+                    binding.txtFeatured.visible()
+                    binding.recyclerFeatured.visible()
+                    featuredAdapter?.swapData(featured)
                 }
             }
             Status.ERROR -> Log.d(TAG, "TestLog: ${resource.status}: ${resource.message}")

@@ -7,4 +7,6 @@
     <string name="label_filter">Filter</string>
     <string name="label_sort_by">Sort By</string>
     <string name="label_shows">Shows</string>
+    <string name="label_populars">Populars</string>
+    <string name="label_featured">Featured</string>
 </resources>

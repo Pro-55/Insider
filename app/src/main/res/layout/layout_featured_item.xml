@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="@dimen/featured_item_width"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dimen_8dp"
+    app:cardCornerRadius="@dimen/dimen_4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/activity_default_margin">
+
+        <ImageView
+            android:id="@+id/img_event_cover"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            app:layout_constraintDimensionRatio="H,5:6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_event_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_default_margin"
+            android:shadowColor="@android:color/black"
+            android:shadowRadius="5"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dimen_14sp"
+            android:textStyle="bold"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/img_event_cover"
+            app:layout_constraintEnd_toEndOf="@id/img_event_cover"
+            app:layout_constraintStart_toStartOf="@id/img_event_cover"
+            tool:text="Chess 24 - Play Chess Online" />
+
+        <TextView
+            android:id="@+id/txt_event_venue_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/activity_default_margin"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            android:singleLine="true"
+            android:textColor="@color/color_secondary_text"
+            android:textSize="@dimen/dimen_12sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_event_cover"
+            tool:text="Daily" />
+
+        <TextView
+            android:id="@+id/txt_event_venue_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/activity_default_margin"
+            android:layout_marginTop="@dimen/dimen_4dp"
+            android:singleLine="true"
+            android:textColor="@color/color_secondary_text"
+            android:textSize="@dimen/dimen_12sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_event_venue_date"
+            tool:text="Play on chess24.com" />
+
+        <TextView
+            android:id="@+id/txt_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/activity_default_margin"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            android:singleLine="true"
+            android:textColor="@color/color_primary_text"
+            android:textSize="@dimen/dimen_12sp"
+            android:textStyle="bold"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_event_venue_name"
+            tool:text="Free" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

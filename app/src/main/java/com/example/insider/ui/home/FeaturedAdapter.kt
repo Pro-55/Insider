@@ -1,4 +1,4 @@
-package com.example.insider.ui.group
+package com.example.insider.ui.home
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,16 +10,14 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.insider.R
 import com.example.insider.models.Event
-import kotlinx.android.synthetic.main.layout_event_item.view.*
+import kotlinx.android.synthetic.main.layout_featured_item.view.*
 
-class EventAdapter(private val glide: RequestManager) :
-    ListAdapter<Event, EventAdapter.ViewHolder>(EventDC()) {
-
-    var listener: Listener? = null
+class FeaturedAdapter(private val glide: RequestManager) :
+    ListAdapter<Event, FeaturedAdapter.ViewHolder>(EventDC()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         LayoutInflater.from(parent.context)
-            .inflate(R.layout.layout_event_item, parent, false)
+            .inflate(R.layout.layout_featured_item, parent, false)
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
@@ -30,8 +28,7 @@ class EventAdapter(private val glide: RequestManager) :
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(event: Event) = with(itemView) {
-
-            glide.load(event.horizontalCover)
+            glide.load(event.verticalCover)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(img_event_cover)
 
@@ -42,11 +39,9 @@ class EventAdapter(private val glide: RequestManager) :
             txt_event_venue_name.text = event.venueName
 
             txt_price.text = event.getDisplayPrice()
-
-            setOnClickListener { listener?.onClick(event) }
-
         }
     }
+
 
     private class EventDC : DiffUtil.ItemCallback<Event>() {
         override fun areItemsTheSame(
@@ -59,9 +54,4 @@ class EventAdapter(private val glide: RequestManager) :
             newItem: Event
         ): Boolean = oldItem == newItem
     }
-
-    interface Listener {
-        fun onClick(event: Event)
-    }
-
 }

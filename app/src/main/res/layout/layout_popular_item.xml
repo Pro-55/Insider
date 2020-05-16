@@ -23,6 +23,21 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/txt_category_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_8dp"
+            android:background="@drawable/bg_category_name"
+            android:gravity="center"
+            android:padding="@dimen/dimen_8dp"
+            android:textAllCaps="true"
+            android:textColor="@color/color_tag_text"
+            android:textSize="@dimen/dimen_12sp"
+            app:layout_constraintEnd_toEndOf="@id/img_event_cover"
+            app:layout_constraintTop_toTopOf="@id/img_event_cover"
+            tool:text="Comedy" />
+
+        <TextView
             android:id="@+id/txt_event_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

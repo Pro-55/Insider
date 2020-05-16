@@ -1,6 +1,5 @@
 package com.example.insider.ui.group
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -26,8 +24,6 @@ import com.example.insider.models.*
 import com.example.insider.ui.HomeViewModel
 import com.example.insider.ui.filter.ShowAdapter
 import com.example.insider.ui.home.BannerAdapter
-import com.example.insider.util.Constants
-import com.example.insider.util.CustomTabHelper
 import com.example.insider.util.extensions.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import javax.inject.Inject
@@ -163,13 +159,20 @@ class GroupFragment : BaseFragment() {
         when (resource.status) {
             Status.LOADING -> Unit
             Status.SUCCESS -> {
-                val data = resource.data ?: return
+                val data = resource.data
+
+                if (data == null) {
+                    showShortSnackBar(resource.message)
+                    return
+                }
+
                 val group = args.group
 
                 val banners = data.getBannersFor(group)
                 if (!banners.isNullOrEmpty()) {
                     binding.recyclerBanners.visible()
                     binding.indicatorBanners.visible()
+                    binding.viewSpacing.visible()
                     bannerAdapter?.swapData(banners)
                 }
 
@@ -194,7 +197,7 @@ class GroupFragment : BaseFragment() {
                 }
 
             }
-            Status.ERROR -> Log.d(TAG, "TestLog: ${resource.status}: ${resource.message}")
+            Status.ERROR -> showShortSnackBar(resource.message)
         }
     }
 
@@ -206,29 +209,6 @@ class GroupFragment : BaseFragment() {
     private fun hideBottomSheet() {
         binding.viewBlur.apply { goneWithFade(parent as ViewGroup) }
         bottomSheetBehavior?.hide()
-    }
-
-    private fun openLink(uri: Uri) {
-        try {
-            val chromeTabs = CustomTabsIntent.Builder()
-                .addDefaultShareMenuItem()
-                .setShowTitle(true)
-                .build()
-
-            val chromePackageName = CustomTabHelper.getPackageNameToUse(requireContext(), uri)
-            if (chromePackageName == null) {
-                // Chrome not installed
-                val browserIntent = Intent(Intent.ACTION_VIEW, uri)
-                if (browserIntent.resolveActivity(requireContext().packageManager) != null)
-                    startActivity(browserIntent)
-            } else {
-                chromeTabs.intent.setPackage(chromePackageName)
-                chromeTabs.launchUrl(requireContext(), uri)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            showShortSnackBar(Constants.REQUEST_FAILED_MESSAGE)
-        }
     }
 
     private fun resetFilters() {

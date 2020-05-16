@@ -10,6 +10,8 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.insider.R
 import com.example.insider.models.Event
+import com.example.insider.util.extensions.gone
+import com.example.insider.util.extensions.visible
 import kotlinx.android.synthetic.main.layout_event_item.view.*
 
 class EventAdapter(private val glide: RequestManager) :
@@ -42,6 +44,14 @@ class EventAdapter(private val glide: RequestManager) :
             txt_event_venue_name.text = event.venueName
 
             txt_price.text = event.getDisplayPrice()
+
+            txt_category_name.apply {
+                val categoryName = event.category?.name?.trim()
+                if (!categoryName.isNullOrEmpty()) {
+                    visible()
+                    text = categoryName
+                } else gone()
+            }
 
             setOnClickListener { listener?.onClick(event) }
 

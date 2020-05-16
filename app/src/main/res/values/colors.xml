@@ -7,13 +7,7 @@
 
     <color name="color_primary_text">@android:color/black</color>
     <color name="color_secondary_text">#484848</color>
-    <color name="color_profile_text">@android:color/white</color>
-
-    <color name="color_error">#B00020</color>
-
-    <color name="color_category_movie">#C60000</color>
-    <color name="color_category_series">#3B5998</color>
-    <color name="color_category_episodes">#5BA525</color>
+    <color name="color_tag_text">@android:color/white</color>
 
     <color name="color_blur_view">#80000000</color>
 

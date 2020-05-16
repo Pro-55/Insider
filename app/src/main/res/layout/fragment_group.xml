@@ -78,21 +78,31 @@
                 app:spi_dotColor="@color/colorAccent"
                 app:spi_dotSelectedColor="@color/colorAccent" />
 
+            <View
+                android:id="@+id/view_spacing"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/activity_default_margin"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/indicator_banners" />
+
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_banners"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="card_team_tool_bar,recycler_banners,indicator_banners" />
+                app:constraint_referenced_ids="card_team_tool_bar,recycler_banners,indicator_banners,view_spacing" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_list"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="@dimen/dimen_8dp"
-                android:layout_marginTop="@dimen/activity_default_margin"
+                android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
                 android:overScrollMode="never"
+                android:paddingTop="@dimen/dimen_8dp"
                 android:splitMotionEvents="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

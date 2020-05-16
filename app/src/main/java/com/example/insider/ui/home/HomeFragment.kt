@@ -1,13 +1,10 @@
 package com.example.insider.ui.home
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,12 +19,7 @@ import com.example.insider.models.Data
 import com.example.insider.models.Resource
 import com.example.insider.models.Status
 import com.example.insider.ui.HomeViewModel
-import com.example.insider.util.Constants
-import com.example.insider.util.CustomTabHelper
-import com.example.insider.util.extensions.getViewModel
-import com.example.insider.util.extensions.glide
-import com.example.insider.util.extensions.showShortSnackBar
-import com.example.insider.util.extensions.visible
+import com.example.insider.util.extensions.*
 import javax.inject.Inject
 
 class HomeFragment : BaseFragment() {
@@ -117,7 +109,12 @@ class HomeFragment : BaseFragment() {
         when (resource.status) {
             Status.LOADING -> Unit
             Status.SUCCESS -> {
-                val data = resource.data ?: return
+                val data = resource.data
+
+                if (data == null) {
+                    showShortSnackBar(resource.message)
+                    return
+                }
 
                 val banners = data.getBannersHome()
                 if (!banners.isNullOrEmpty()) {
@@ -147,30 +144,7 @@ class HomeFragment : BaseFragment() {
                     featuredAdapter?.swapData(featured)
                 }
             }
-            Status.ERROR -> Log.d(TAG, "TestLog: ${resource.status}: ${resource.message}")
-        }
-    }
-
-    private fun openLink(uri: Uri) {
-        try {
-            val chromeTabs = CustomTabsIntent.Builder()
-                .addDefaultShareMenuItem()
-                .setShowTitle(true)
-                .build()
-
-            val chromePackageName = CustomTabHelper.getPackageNameToUse(requireContext(), uri)
-            if (chromePackageName == null) {
-                // Chrome not installed
-                val browserIntent = Intent(Intent.ACTION_VIEW, uri)
-                if (browserIntent.resolveActivity(requireContext().packageManager) != null)
-                    startActivity(browserIntent)
-            } else {
-                chromeTabs.intent.setPackage(chromePackageName)
-                chromeTabs.launchUrl(requireContext(), uri)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            showShortSnackBar(Constants.REQUEST_FAILED_MESSAGE)
+            Status.ERROR -> showShortSnackBar(resource.message)
         }
     }
 

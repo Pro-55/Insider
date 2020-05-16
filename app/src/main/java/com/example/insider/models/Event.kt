@@ -42,8 +42,10 @@ data class SubData(
     val _id: String?,
     val name: String?,
     val icon: String?,
-    val slug: String?
-)
+    val count: Int = 0
+) {
+    fun getEventCount(): String = if (count == 1) "$count event" else "$count events"
+}
 
 fun JsonObject.parseEventsMasterList(): List<Event>? = keySet()?.mapNotNull {
     val event = getAsJsonObject(it)
@@ -131,8 +133,7 @@ fun JsonObject.parseLocation(): Location = Location(
 fun JsonObject.parseSubData(): SubData = SubData(
     _id = getAsString("_id"),
     name = getAsString("name"),
-    icon = getAsString("icon_img"),
-    slug = getAsString("slug")
+    icon = getAsString("icon_img")
 )
 
 fun JsonArray.parseApplicableFilters(): List<String> = mapNotNull { it?.asString }

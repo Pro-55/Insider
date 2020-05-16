@@ -17,8 +17,6 @@ import kotlinx.android.synthetic.main.layout_event_item.view.*
 class EventAdapter(private val glide: RequestManager) :
     ListAdapter<Event, EventAdapter.ViewHolder>(EventDC()) {
 
-    var listener: Listener? = null
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_event_item, parent, false)
@@ -53,7 +51,7 @@ class EventAdapter(private val glide: RequestManager) :
                 } else gone()
             }
 
-            setOnClickListener { listener?.onClick(event) }
+            Unit
 
         }
     }
@@ -68,10 +66,6 @@ class EventAdapter(private val glide: RequestManager) :
             oldItem: Event,
             newItem: Event
         ): Boolean = oldItem == newItem
-    }
-
-    interface Listener {
-        fun onClick(event: Event)
     }
 
 }

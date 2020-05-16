@@ -1,0 +1,63 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_background"
+        android:clickable="true"
+        android:focusable="true">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_categories_tool_bar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/img_btn_back"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="@dimen/activity_default_margin"
+                    android:src="@drawable/ic_back"
+                    app:layout_constraintDimensionRatio="H,1:1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txt_title"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/label_categories"
+                    android:textColor="@color/color_primary_text"
+                    android:textSize="@dimen/dimen_20sp"
+                    android:textStyle="bold"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/img_btn_back" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_categories"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:padding="@dimen/dimen_8dp"
+            android:splitMotionEvents="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_categories_tool_bar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

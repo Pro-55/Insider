@@ -13,14 +13,7 @@ import com.example.insider.R
 import com.example.insider.models.Event
 import com.example.insider.util.extensions.gone
 import com.example.insider.util.extensions.visible
-import kotlinx.android.synthetic.main.layout_event_item.view.*
 import kotlinx.android.synthetic.main.layout_featured_item.view.*
-import kotlinx.android.synthetic.main.layout_featured_item.view.img_event_cover
-import kotlinx.android.synthetic.main.layout_featured_item.view.txt_category_name
-import kotlinx.android.synthetic.main.layout_featured_item.view.txt_event_name
-import kotlinx.android.synthetic.main.layout_featured_item.view.txt_event_venue_date
-import kotlinx.android.synthetic.main.layout_featured_item.view.txt_event_venue_name
-import kotlinx.android.synthetic.main.layout_featured_item.view.txt_price
 
 class FeaturedAdapter(private val glide: RequestManager) :
     ListAdapter<Event, FeaturedAdapter.ViewHolder>(EventDC()) {
@@ -38,6 +31,7 @@ class FeaturedAdapter(private val glide: RequestManager) :
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(event: Event) = with(itemView) {
+
             glide.load(event.verticalCover)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(img_event_cover)

@@ -33,7 +33,22 @@ data class Data(
         return lists?.masterList?.mapNotNull { e -> if (k?.contains(e.slug) == true) e else null }
     }
 
+    fun getCategorisedListFor(key: String): List<Event>? {
+        val k = lists?.categories?.find { c -> c.key == key }?.value
+        return lists?.masterList?.mapNotNull { e -> if (k?.contains(e.slug) == true) e else null }
+    }
+
     fun getPopularsList(): List<Event>? = populars?.sortedBy { e -> e.popularityScore }
+
+    fun getCategoriesShortList(): List<SubData>? {
+        val categories = getCategories()
+        if (categories.isNullOrEmpty()) return null
+        return if (categories.size >= 8) categories.subList(0, 8) else categories
+    }
+
+    fun getCategories(): List<SubData>? = lists?.masterList?.groupBy { e -> e.category }
+        ?.mapNotNull { m -> m.key?.copy(count = m.value.size) }
+        ?.sortedByDescending { c -> c.count }
 
 }
 

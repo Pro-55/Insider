@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.insider.models.Event
 import com.example.insider.util.Constants
 import com.example.insider.util.CustomTabHelper
 
@@ -32,6 +33,12 @@ fun Fragment.openLink(uri: Uri) {
         showShortSnackBar(Constants.REQUEST_FAILED_MESSAGE)
     }
 }
+
+fun List<Event>.sortAsc(key: String?): List<Event> =
+    if (key == "min_price") sortedBy { it.minPrice } else sortedBy { it.startTime }
+
+fun List<Event>.sortDese(key: String?): List<Event> =
+    if (key == "min_price") sortedByDescending { it.minPrice } else sortedByDescending { it.startTime }
 
 inline fun <reified T : ViewModel> FragmentActivity.getViewModel(
     factory: ViewModelProvider.Factory

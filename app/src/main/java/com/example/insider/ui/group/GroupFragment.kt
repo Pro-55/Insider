@@ -146,11 +146,6 @@ class GroupFragment : BaseFragment() {
 
     private fun setupEventsRecycler() {
         eventAdapter = EventAdapter(glide())
-        eventAdapter?.listener = object : EventAdapter.Listener {
-            override fun onClick(event: Event) {
-                Log.d(TAG, "TestLog: e:$event")
-            }
-        }
         binding.recyclerList.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerList.adapter = eventAdapter
     }
@@ -171,7 +166,7 @@ class GroupFragment : BaseFragment() {
                 val banners = data.getBannersFor(group)
                 if (!banners.isNullOrEmpty()) {
                     binding.recyclerBanners.visible()
-                    binding.indicatorBanners.visible()
+                    if (banners.size > 1) binding.indicatorBanners.visible()
                     binding.viewSpacing.visible()
                     bannerAdapter?.swapData(banners)
                 }
@@ -195,6 +190,8 @@ class GroupFragment : BaseFragment() {
                     binding.recyclerShows.visible()
                     showAdapter?.swapData(shows)
                 }
+
+                if (!sorts.isNullOrEmpty() || !shows.isNullOrEmpty()) binding.fabFilterList.visible()
 
             }
             Status.ERROR -> showShortSnackBar(resource.message)
@@ -228,17 +225,11 @@ class GroupFragment : BaseFragment() {
             events!!
 
         val sortedList = when (sort?.type) {
-            "asc" -> sortAsc(sort.key, filteredList)
-            "desc" -> sortDese(sort.key, filteredList)
+            "asc" -> filteredList.sortAsc(sort.key)
+            "desc" -> filteredList.sortDese(sort.key)
             else -> filteredList
         }
         eventAdapter?.swapData(sortedList)
     }
-
-    private fun sortAsc(key: String?, filteredList: List<Event>): List<Event> =
-        if (key == "min_price") filteredList.sortedBy { it.minPrice } else filteredList.sortedBy { it.startTime }
-
-    private fun sortDese(key: String?, filteredList: List<Event>): List<Event> =
-        if (key == "min_price") filteredList.sortedByDescending { it.minPrice } else filteredList.sortedByDescending { it.startTime }
 
 }

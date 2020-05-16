@@ -14,7 +14,7 @@
             android:layout_height="match_parent">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/card_team_tool_bar"
+                android:id="@+id/card_group_tool_bar"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +60,7 @@
                 app:layout_constraintDimensionRatio="H,2:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/card_team_tool_bar"
+                app:layout_constraintTop_toBottomOf="@id/card_group_tool_bar"
                 tool:listitem="@layout/layout_banner_item" />
 
             <ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="card_team_tool_bar,recycler_banners,indicator_banners,view_spacing" />
+                app:constraint_referenced_ids="card_group_tool_bar,recycler_banners,indicator_banners,view_spacing" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_list"
@@ -114,6 +114,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_default_margin"
+                android:visibility="gone"
                 app:backgroundTint="@color/colorAccent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

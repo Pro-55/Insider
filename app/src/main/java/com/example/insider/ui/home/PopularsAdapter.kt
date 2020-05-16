@@ -31,6 +31,7 @@ class PopularsAdapter(private val glide: RequestManager) :
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(event: Event) = with(itemView) {
+
             glide.load(event.horizontalCover)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(img_event_cover)

@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -36,6 +37,7 @@ class HomeFragment : BaseFragment() {
     private var groupAdapter: GroupAdapter? = null
     private var popularsAdapter: PopularsAdapter? = null
     private var featuredAdapter: FeaturedAdapter? = null
+    private var categoriesAdapter: CategoriesAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,6 +58,10 @@ class HomeFragment : BaseFragment() {
         setupPopularRecycler()
 
         setupFeaturedRecycler()
+
+        setupCategoriesRecycler()
+
+        binding.txtBtnSeeAll.setOnClickListener { goToCategories() }
 
         viewModel.data.observe(viewLifecycleOwner, Observer { bindData(it) })
 
@@ -105,6 +111,20 @@ class HomeFragment : BaseFragment() {
         binding.recyclerFeatured.adapter = featuredAdapter
     }
 
+    private fun setupCategoriesRecycler() {
+        categoriesAdapter = CategoriesAdapter(glide())
+        categoriesAdapter?.listener = object : CategoriesAdapter.Listener {
+            override fun onClick(category: String?) {
+                if (category != null) {
+                    val action = HomeFragmentDirections.navigateHomeToCategory(category)
+                    findNavController().navigate(action)
+                }
+            }
+        }
+        binding.recyclerCategories.layoutManager = GridLayoutManager(requireContext(), 4)
+        binding.recyclerCategories.adapter = categoriesAdapter
+    }
+
     private fun bindData(resource: Resource<Data>) {
         when (resource.status) {
             Status.LOADING -> Unit
@@ -143,9 +163,23 @@ class HomeFragment : BaseFragment() {
                     binding.recyclerFeatured.visible()
                     featuredAdapter?.swapData(featured)
                 }
+
+                val categories = data.getCategoriesShortList()
+                if (!categories.isNullOrEmpty()) {
+                    binding.txtCategories.visible()
+                    binding.txtBtnSeeAll.visible()
+                    binding.recyclerCategories.visible()
+                    categoriesAdapter?.swapData(categories)
+                }
+
             }
             Status.ERROR -> showShortSnackBar(resource.message)
         }
+    }
+
+    private fun goToCategories() {
+        val action = HomeFragmentDirections.navigateHomeToCategories()
+        findNavController().navigate(action)
     }
 
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dimen_8dp"
+    android:paddingBottom="@dimen/activity_default_margin">
+
+    <ImageView
+        android:id="@+id/img_icon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_categories_item"
+        android:padding="@dimen/dimen_8dp"
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/color_primary_text"
+        android:textSize="@dimen/dimen_12sp"
+        android:textStyle="bold"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="@id/img_icon"
+        app:layout_constraintStart_toStartOf="@id/img_icon"
+        app:layout_constraintTop_toBottomOf="@id/img_icon"
+        tool:text="Yoga" />
+
+    <TextView
+        android:id="@+id/txt_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_4dp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/color_secondary_text"
+        android:textSize="@dimen/dimen_12sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="@id/txt_name"
+        app:layout_constraintStart_toStartOf="@id/txt_name"
+        app:layout_constraintTop_toBottomOf="@id/txt_name"
+        tool:text="55 events" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

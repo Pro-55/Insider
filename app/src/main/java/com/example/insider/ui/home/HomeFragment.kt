@@ -127,11 +127,15 @@ class HomeFragment : BaseFragment() {
 
     private fun bindData(resource: Resource<Data>) {
         when (resource.status) {
-            Status.LOADING -> Unit
+            Status.LOADING -> binding.progressHome.visible()
             Status.SUCCESS -> {
+                binding.progressHome.gone()
+
                 val data = resource.data
 
                 if (data == null) {
+                    binding.imgErrorPlaceholder.visible()
+                    binding.txtErrorPlaceholder.visible()
                     showShortSnackBar(resource.message)
                     return
                 }
@@ -173,7 +177,12 @@ class HomeFragment : BaseFragment() {
                 }
 
             }
-            Status.ERROR -> showShortSnackBar(resource.message)
+            Status.ERROR -> {
+                binding.progressHome.gone()
+                binding.imgErrorPlaceholder.visible()
+                binding.txtErrorPlaceholder.visible()
+                showShortSnackBar(resource.message)
+            }
         }
     }
 

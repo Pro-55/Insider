@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Insider</string>
 
+    <string name="label_error_placeholder">Something went wrong…</string>
+
     <string name="label_looking_for">Looking For</string>
     <string name="label_reset">Reset</string>
     <string name="label_done">Done</string>
@@ -9,6 +11,6 @@
     <string name="label_shows">Shows</string>
     <string name="label_populars">Populars</string>
     <string name="label_featured">Featured</string>
-    <string name="label_see_all">See All</string>
+    <string name="label_view_all">View All</string>
     <string name="label_categories">Categories</string>
 </resources>

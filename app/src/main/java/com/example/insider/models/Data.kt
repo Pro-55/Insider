@@ -36,6 +36,7 @@ data class Data(
     fun getCategorisedListFor(key: String): List<Event>? {
         val k = lists?.categories?.find { c -> c.key == key }?.value
         return lists?.masterList?.mapNotNull { e -> if (k?.contains(e.slug) == true) e else null }
+            ?.sortedBy { e -> e.popularityScore }
     }
 
     fun getPopularsList(): List<Event>? = populars?.sortedBy { e -> e.popularityScore }

@@ -1,6 +1,5 @@
 package com.example.insider.ui.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +51,7 @@ class FeaturedAdapter(private val glide: RequestManager) :
                 } else gone()
             }
 
-            setOnClickListener { Log.d("TAG", "TestLog: c:${event.category}") }
+            Unit
         }
     }
 

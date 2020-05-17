@@ -1,212 +1,256 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/color_background"
         android:clickable="true"
         android:focusable="true">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_banners"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:nestedScrollingEnabled="false"
-                android:splitMotionEvents="false"
-                android:visibility="gone"
-                app:layout_constraintDimensionRatio="H,2:1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
-                android:id="@+id/indicator_banners"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/dimen_8dp"
-                android:overScrollMode="never"
-                android:visibility="gone"
-                app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recycler_banners"
-                app:spi_dotColor="@color/colorAccent"
-                app:spi_dotSelectedColor="@color/colorAccent" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_banners"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:nestedScrollingEnabled="false"
+                    android:splitMotionEvents="false"
+                    android:visibility="gone"
+                    app:layout_constraintDimensionRatio="H,2:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrier_banners"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="bottom"
-                app:constraint_referenced_ids="recycler_banners,indicator_banners" />
+                <ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
+                    android:id="@+id/indicator_banners"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/dimen_8dp"
+                    android:overScrollMode="never"
+                    android:visibility="gone"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recycler_banners"
+                    app:spi_dotColor="@color/colorAccent"
+                    app:spi_dotSelectedColor="@color/colorAccent" />
 
-            <TextView
-                android:id="@+id/txt_groups"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_default_margin"
-                android:layout_marginTop="@dimen/dimen_32dp"
-                android:text="@string/label_looking_for"
-                android:textAllCaps="true"
-                android:textColor="@color/color_primary_text"
-                android:textSize="@dimen/dimen_20sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/barrier_banners" />
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/barrier_banners"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="recycler_banners,indicator_banners" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_groups"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false"
-                android:padding="@dimen/dimen_8dp"
-                android:splitMotionEvents="false"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_groups" />
+                <TextView
+                    android:id="@+id/txt_groups"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_default_margin"
+                    android:layout_marginTop="@dimen/dimen_32dp"
+                    android:text="@string/label_looking_for"
+                    android:textAllCaps="true"
+                    android:textColor="@color/color_primary_text"
+                    android:textSize="@dimen/dimen_20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/barrier_banners" />
 
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrier_groups"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="bottom"
-                app:constraint_referenced_ids="txt_groups,recycler_groups" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_groups"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:padding="@dimen/dimen_8dp"
+                    android:splitMotionEvents="false"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_groups" />
 
-            <TextView
-                android:id="@+id/txt_popular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_default_margin"
-                android:layout_marginTop="@dimen/dimen_32dp"
-                android:text="@string/label_populars"
-                android:textAllCaps="true"
-                android:textColor="@color/color_primary_text"
-                android:textSize="@dimen/dimen_20sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/barrier_groups" />
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/barrier_groups"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="txt_groups,recycler_groups" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_popular"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false"
-                android:padding="@dimen/dimen_8dp"
-                android:splitMotionEvents="false"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_popular" />
+                <TextView
+                    android:id="@+id/txt_popular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_default_margin"
+                    android:layout_marginTop="@dimen/dimen_32dp"
+                    android:text="@string/label_populars"
+                    android:textAllCaps="true"
+                    android:textColor="@color/color_primary_text"
+                    android:textSize="@dimen/dimen_20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/barrier_groups" />
 
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrier_popular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="bottom"
-                app:constraint_referenced_ids="txt_popular,recycler_popular" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_popular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:padding="@dimen/dimen_8dp"
+                    android:splitMotionEvents="false"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_popular" />
 
-            <TextView
-                android:id="@+id/txt_featured"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_default_margin"
-                android:layout_marginTop="@dimen/dimen_32dp"
-                android:text="@string/label_featured"
-                android:textAllCaps="true"
-                android:textColor="@color/color_primary_text"
-                android:textSize="@dimen/dimen_20sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/barrier_popular" />
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/barrier_popular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="txt_popular,recycler_popular" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_featured"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false"
-                android:padding="@dimen/dimen_8dp"
-                android:splitMotionEvents="false"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_featured" />
+                <TextView
+                    android:id="@+id/txt_featured"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_default_margin"
+                    android:layout_marginTop="@dimen/dimen_32dp"
+                    android:text="@string/label_featured"
+                    android:textAllCaps="true"
+                    android:textColor="@color/color_primary_text"
+                    android:textSize="@dimen/dimen_20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/barrier_popular" />
 
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrier_featured"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="bottom"
-                app:constraint_referenced_ids="txt_featured,recycler_featured" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_featured"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:padding="@dimen/dimen_8dp"
+                    android:splitMotionEvents="false"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_featured" />
 
-            <TextView
-                android:id="@+id/txt_categories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_default_margin"
-                android:layout_marginTop="@dimen/dimen_32dp"
-                android:text="@string/label_featured"
-                android:textAllCaps="true"
-                android:textColor="@color/color_primary_text"
-                android:textSize="@dimen/dimen_20sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@id/txt_btn_see_all"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/barrier_featured" />
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/barrier_featured"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="txt_featured,recycler_featured" />
 
-            <TextView
-                android:id="@+id/txt_btn_see_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/activity_default_margin"
-                android:padding="@dimen/dimen_8dp"
-                android:text="@string/label_see_all"
-                android:textAllCaps="true"
-                android:textColor="@color/color_secondary_text"
-                android:textSize="@dimen/dimen_16sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/txt_categories"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintStart_toEndOf="@id/txt_categories"
-                app:layout_constraintTop_toTopOf="@id/txt_categories" />
+                <TextView
+                    android:id="@+id/txt_categories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_default_margin"
+                    android:layout_marginTop="@dimen/dimen_32dp"
+                    android:text="@string/label_featured"
+                    android:textAllCaps="true"
+                    android:textColor="@color/color_primary_text"
+                    android:textSize="@dimen/dimen_20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toStartOf="@id/txt_btn_see_all"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/barrier_featured" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_categories"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false"
-                android:padding="@dimen/dimen_8dp"
-                android:splitMotionEvents="false"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_categories" />
+                <TextView
+                    android:id="@+id/txt_btn_see_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/activity_default_margin"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="@dimen/dimen_8dp"
+                    android:text="@string/label_view_all"
+                    android:textColor="@color/color_secondary_text"
+                    android:textSize="@dimen/dimen_16sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/txt_categories"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@id/txt_categories"
+                    app:layout_constraintTop_toTopOf="@id/txt_categories" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_categories"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:padding="@dimen/dimen_8dp"
+                    android:splitMotionEvents="false"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_categories" />
 
-    </androidx.core.widget.NestedScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <ImageView
+            android:id="@+id/img_error_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dimen_120dp"
+            android:layout_margin="@dimen/dimen_32dp"
+            android:src="@drawable/ic_error_placeholder"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_error_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_default_margin"
+            android:gravity="center"
+            android:text="@string/label_error_placeholder"
+            android:textColor="@color/color_secondary_text"
+            android:textSize="@dimen/dimen_24sp"
+            android:visibility="gone"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_error_placeholder" />
+
+        <ProgressBar
+            android:id="@+id/progress_home"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

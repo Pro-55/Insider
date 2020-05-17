@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.insider.R
@@ -24,6 +25,7 @@ class HomeActivity : DaggerAppCompatActivity() {
     private val viewModel by lazy { getViewModel<HomeViewModel>(factory) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val colorBackground = resources.getColor(R.color.color_background)
             window.statusBarColor = colorBackground

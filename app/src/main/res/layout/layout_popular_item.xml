@@ -5,6 +5,9 @@
     android:layout_width="@dimen/populars_item_width"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/dimen_8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
     app:cardCornerRadius="@dimen/dimen_4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout

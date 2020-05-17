@@ -2,6 +2,8 @@ package com.example.insider.ui.group
 
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.insider.BaseFragment
 import com.example.insider.R
 import com.example.insider.databinding.FragmentGroupBinding
@@ -38,6 +41,16 @@ class GroupFragment : BaseFragment() {
     private lateinit var binding: FragmentGroupBinding
     private val args by navArgs<GroupFragmentArgs>()
     private val viewModel by lazy { requireActivity().getViewModel<HomeViewModel>(factory) }
+    private val textWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {}
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            searchQuery = s?.toString()?.trim() ?: ""
+            filterList()
+        }
+    }
     private var bannerAdapter: BannerAdapter? = null
     private var showAdapter: ShowAdapter? = null
     private var eventAdapter: EventAdapter? = null
@@ -45,6 +58,7 @@ class GroupFragment : BaseFragment() {
     private var events: List<Event>? = null
     private var sorts: List<Sort>? = null
     private var filter = Pair<Int, Show?>(0, null)
+    private var searchQuery = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,7 +75,7 @@ class GroupFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setClickListener()
+        setListeners()
 
         setupBottomSheet()
 
@@ -77,9 +91,13 @@ class GroupFragment : BaseFragment() {
 
     }
 
-    private fun setClickListener() {
+    private fun setListeners() {
 
         binding.imgBtnBack.setOnClickListener { onBackPressed() }
+
+        binding.imgBtnSearch.setOnClickListener { enableSearch() }
+
+        binding.imgBtnCancel.setOnClickListener { disableSearch() }
 
         binding.fabFilterList.setOnClickListener { extendBottomSheet() }
 
@@ -88,6 +106,15 @@ class GroupFragment : BaseFragment() {
         binding.txtBtnReset.setOnClickListener { resetFilters() }
 
         binding.txtBtnDone.setOnClickListener { hideBottomSheet() }
+
+        binding.editSearch.addTextChangedListener(textWatcher)
+
+        binding.editSearch.setOnEditorActionListener { _, _, _ ->
+            clearFocus()
+            hideKeyboard()
+            filterList()
+            true
+        }
 
     }
 
@@ -145,8 +172,22 @@ class GroupFragment : BaseFragment() {
 
     private fun setupEventsRecycler() {
         eventAdapter = EventAdapter(glide())
+        eventAdapter?.listener = object : EventAdapter.Listener {
+            override fun onClick(_id: String?, isFavorite: Boolean) {
+                _id ?: return
+
+                val isPresent = viewModel.favorites.contains(_id)
+                if (!isFavorite && !isPresent) viewModel.favorites.add(_id)
+                else if (isFavorite) viewModel.favorites.remove(_id)
+
+                filterList()
+
+            }
+        }
         binding.recyclerList.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerList.adapter = eventAdapter
+        (binding.recyclerList.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations =
+            false
     }
 
     private fun bindData(resource: Resource<Data>) {
@@ -223,12 +264,44 @@ class GroupFragment : BaseFragment() {
         else
             events!!
 
+        val favorites = viewModel.favorites
+
         val sortedList = when (sort?.type) {
             "asc" -> filteredList.sortAsc(sort.key)
             "desc" -> filteredList.sortDese(sort.key)
             else -> filteredList
         }
+            .map { e -> if (favorites.contains(e._id)) e.copy(isFavorite = true) else e }
+            .mapNotNull { e -> if (e.name?.contains(searchQuery, true) == true) e else null }
+
         eventAdapter?.swapData(sortedList)
+    }
+
+    private fun enableSearch() {
+        binding.layoutToolBar.gone()
+        binding.layoutSearch.visible()
+    }
+
+    private fun disableSearch() {
+        binding.layoutSearch.gone()
+        binding.layoutToolBar.visible()
+        searchQuery = ""
+        clearFocus()
+        hideKeyboard()
+        filterList()
+    }
+
+    private fun clearFocus() {
+        requireActivity().clearFocus()
+    }
+
+    private fun hideKeyboard() {
+        requireActivity().hideKeyboard()
+    }
+
+    override fun onDestroyView() {
+        binding.editSearch.removeTextChangedListener(textWatcher)
+        super.onDestroyView()
     }
 
 }

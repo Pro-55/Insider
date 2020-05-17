@@ -17,6 +17,8 @@ import kotlinx.android.synthetic.main.layout_popular_item.view.*
 class PopularsAdapter(private val glide: RequestManager) :
     ListAdapter<Event, PopularsAdapter.ViewHolder>(EventDC()) {
 
+    var listener: Listener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_popular_item, parent, false)
@@ -51,10 +53,15 @@ class PopularsAdapter(private val glide: RequestManager) :
                 } else gone()
             }
 
-            Unit
+            val drawable = if (event.isFavorite) resources.getDrawable(R.drawable.ic_favorite)
+            else resources.getDrawable(R.drawable.ic_favorite_border)
+
+            img_btn_favorite.setImageDrawable(drawable)
+
+            img_btn_favorite.setOnClickListener { listener?.onClick(event._id, event.isFavorite) }
+
         }
     }
-
 
     private class EventDC : DiffUtil.ItemCallback<Event>() {
         override fun areItemsTheSame(
@@ -67,4 +74,9 @@ class PopularsAdapter(private val glide: RequestManager) :
             newItem: Event
         ): Boolean = oldItem == newItem
     }
+
+    interface Listener {
+        fun onClick(_id: String?, isFavorite: Boolean)
+    }
+
 }

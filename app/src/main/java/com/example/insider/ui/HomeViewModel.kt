@@ -19,6 +19,8 @@ class HomeViewModel @Inject constructor(
         private val TAG = HomeViewModel::class.java.simpleName
     }
 
+    val favorites = mutableListOf<String>()
+
     private val _data = MutableLiveData<Resource<Data>>()
     val data: LiveData<Resource<Data>> = _data
 

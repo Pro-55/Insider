@@ -13,10 +13,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.insider.BaseFragment
 import com.example.insider.R
 import com.example.insider.databinding.FragmentHomeBinding
 import com.example.insider.models.Data
+import com.example.insider.models.Event
 import com.example.insider.models.Resource
 import com.example.insider.models.Status
 import com.example.insider.ui.HomeViewModel
@@ -38,6 +40,8 @@ class HomeFragment : BaseFragment() {
     private var popularsAdapter: PopularsAdapter? = null
     private var featuredAdapter: FeaturedAdapter? = null
     private var categoriesAdapter: CategoriesAdapter? = null
+    private var populars: List<Event>? = null
+    private var featured: List<Event>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -99,16 +103,44 @@ class HomeFragment : BaseFragment() {
 
     private fun setupPopularRecycler() {
         popularsAdapter = PopularsAdapter(glide())
+        popularsAdapter?.listener = object : PopularsAdapter.Listener {
+            override fun onClick(_id: String?, isFavorite: Boolean) {
+                _id ?: return
+
+                val isPresent = viewModel.favorites.contains(_id)
+                if (!isFavorite && !isPresent) viewModel.favorites.add(_id)
+                else if (isFavorite) viewModel.favorites.remove(_id)
+
+                updatePopularsList()
+
+            }
+        }
         binding.recyclerPopular.layoutManager =
             LinearLayoutManager(requireContext(), HORIZONTAL, false)
         binding.recyclerPopular.adapter = popularsAdapter
+        (binding.recyclerPopular.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations =
+            false
     }
 
     private fun setupFeaturedRecycler() {
         featuredAdapter = FeaturedAdapter(glide())
+        featuredAdapter?.listener = object : FeaturedAdapter.Listener {
+            override fun onClick(_id: String?, isFavorite: Boolean) {
+                _id ?: return
+
+                val isPresent = viewModel.favorites.contains(_id)
+                if (!isFavorite && !isPresent) viewModel.favorites.add(_id)
+                else if (isFavorite) viewModel.favorites.remove(_id)
+
+                updateFeaturedList()
+
+            }
+        }
         binding.recyclerFeatured.layoutManager =
             LinearLayoutManager(requireContext(), HORIZONTAL, false)
         binding.recyclerFeatured.adapter = featuredAdapter
+        (binding.recyclerFeatured.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations =
+            false
     }
 
     private fun setupCategoriesRecycler() {
@@ -154,18 +186,18 @@ class HomeFragment : BaseFragment() {
                     groupAdapter?.swapData(groups)
                 }
 
-                val populars = data.getPopularsList()
+                populars = data.getPopularsList()
                 if (!populars.isNullOrEmpty()) {
                     binding.txtPopular.visible()
                     binding.recyclerPopular.visible()
-                    popularsAdapter?.swapData(populars)
+                    updatePopularsList()
                 }
 
-                val featured = data.featured
+                featured = data.featured
                 if (!featured.isNullOrEmpty()) {
                     binding.txtFeatured.visible()
                     binding.recyclerFeatured.visible()
-                    featuredAdapter?.swapData(featured)
+                    updateFeaturedList()
                 }
 
                 val categories = data.getCategoriesShortList()
@@ -189,6 +221,21 @@ class HomeFragment : BaseFragment() {
     private fun goToCategories() {
         val action = HomeFragmentDirections.navigateHomeToCategories()
         findNavController().navigate(action)
+    }
+
+    private fun updateFeaturedList() {
+        val favorites = viewModel.favorites
+        val list =
+            featured!!.map { e -> if (favorites.contains(e._id)) e.copy(isFavorite = true) else e }
+        featuredAdapter?.swapData(list)
+    }
+
+    private fun updatePopularsList() {
+        populars ?: return
+        val favorites = viewModel.favorites
+        val list =
+            populars!!.map { e -> if (favorites.contains(e._id)) e.copy(isFavorite = true) else e }
+        popularsAdapter?.swapData(list)
     }
 
 }

@@ -22,6 +22,46 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <EditText
+                        android:id="@+id/edit_search"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="@dimen/dimen_8dp"
+                        android:background="@null"
+                        android:drawableStart="@drawable/ic_search"
+                        android:drawablePadding="@dimen/dimen_8dp"
+                        android:gravity="center_vertical"
+                        android:hint="@string/hint_search"
+                        android:imeOptions="actionSearch"
+                        android:padding="@dimen/dimen_8dp"
+                        android:singleLine="true"
+                        android:textColor="@color/color_primary_text"
+                        android:textSize="@dimen/dimen_16sp"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toStartOf="@id/img_btn_cancel"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/img_btn_cancel"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dimen_32dp"
+                        android:layout_marginEnd="@dimen/dimen_8dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="@dimen/dimen_4dp"
+                        android:src="@drawable/ic_close"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="H,1:1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_tool_bar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -32,6 +72,7 @@
                         android:background="?attr/selectableItemBackground"
                         android:padding="@dimen/activity_default_margin"
                         android:src="@drawable/ic_back"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="H,1:1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -45,9 +86,22 @@
                         android:textSize="@dimen/dimen_20sp"
                         android:textStyle="bold"
                         app:layout_constrainedWidth="true"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/img_btn_search"
                         app:layout_constraintStart_toEndOf="@id/img_btn_back"
                         tool:text="Group" />
+
+                    <ImageView
+                        android:id="@+id/img_btn_search"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dimen_32dp"
+                        android:layout_margin="@dimen/activity_default_margin"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="@dimen/dimen_4dp"
+                        android:src="@drawable/ic_search"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="H,1:1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
@@ -103,6 +157,7 @@
                 android:nestedScrollingEnabled="false"
                 android:overScrollMode="never"
                 android:paddingTop="@dimen/dimen_8dp"
+                android:paddingBottom="72dp"
                 android:splitMotionEvents="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

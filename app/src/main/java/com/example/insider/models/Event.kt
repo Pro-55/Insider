@@ -12,17 +12,14 @@ data class Event(
     val slug: String?,
     val horizontalCover: String?,
     val verticalCover: String?,
-    val city: String?,
     val venueId: String?,
     val venueName: String?,
     val venueDate: String?,
     val venueLocation: Location?,
-    val isRsvp: Boolean?,
+    val isFavorite: Boolean = false,
     val category: SubData?,
     val group: SubData?,
-    val eventState: String?,
     val price: String?,
-    val communicationStrategy: String?,
     val applicableFilters: List<String>?,
     val popularityScore: Float?,
     val minPrice: Int?
@@ -31,6 +28,38 @@ data class Event(
         price ?: return ""
         return if (price.contains("free", true)) price else "${Constants.RUPEE_SYMBOL}$price"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (javaClass != other?.javaClass) return false
+        other as Event?
+
+        if (_id != other._id) return false
+        if (isFavorite != other.isFavorite) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = _id?.hashCode() ?: 0
+        result = 31 * result + (startTime?.hashCode() ?: 0)
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (slug?.hashCode() ?: 0)
+        result = 31 * result + (horizontalCover?.hashCode() ?: 0)
+        result = 31 * result + (verticalCover?.hashCode() ?: 0)
+        result = 31 * result + (venueId?.hashCode() ?: 0)
+        result = 31 * result + (venueName?.hashCode() ?: 0)
+        result = 31 * result + (venueDate?.hashCode() ?: 0)
+        result = 31 * result + (venueLocation?.hashCode() ?: 0)
+        result = 31 * result + isFavorite.hashCode()
+        result = 31 * result + (category?.hashCode() ?: 0)
+        result = 31 * result + (group?.hashCode() ?: 0)
+        result = 31 * result + (price?.hashCode() ?: 0)
+        result = 31 * result + (applicableFilters?.hashCode() ?: 0)
+        result = 31 * result + (popularityScore?.hashCode() ?: 0)
+        result = 31 * result + (minPrice ?: 0)
+        return result
+    }
+
 }
 
 data class Location(
@@ -56,17 +85,13 @@ fun JsonObject.parseEventsMasterList(): List<Event>? = keySet()?.mapNotNull {
         slug = event?.getAsString("slug"),
         horizontalCover = event?.getAsString("horizontal_cover_image"),
         verticalCover = event?.getAsString("vertical_cover_image"),
-        city = event?.getAsString("city"),
         venueId = event?.getAsString("venue_id"),
         venueName = event?.getAsString("venue_name"),
         venueDate = event?.getAsString("venue_date_string"),
         venueLocation = event?.getAsJsonObject("venue_geolocation")?.parseLocation(),
-        isRsvp = event?.getAsBoolean("is_rsvp"),
         category = event?.getAsJsonObject("category_id")?.parseSubData(),
         group = event?.getAsJsonObject("group_id")?.parseSubData(),
-        eventState = event?.getAsString("event_state"),
         price = event?.getAsString("price_display_string"),
-        communicationStrategy = event?.getAsString("communication_strategy"),
         applicableFilters = event?.getAsJsonArray("applicable_filters")?.parseApplicableFilters(),
         popularityScore = event?.getAsFloat("popularity_score"),
         minPrice = event?.getAsInt("min_price")
@@ -82,17 +107,13 @@ fun JsonArray.parsePopulars(): List<Event> = mapNotNull {
         slug = event?.getAsString("slug"),
         horizontalCover = event?.getAsString("horizontal_cover_image"),
         verticalCover = event?.getAsString("vertical_cover_image"),
-        city = event?.getAsString("city"),
         venueId = event?.getAsString("venue_id"),
         venueName = event?.getAsString("venue_name"),
         venueDate = event?.getAsString("venue_date_string"),
         venueLocation = event?.getAsJsonObject("venue_geolocation")?.parseLocation(),
-        isRsvp = event?.getAsBoolean("is_rsvp"),
         category = event?.getAsJsonObject("category_id")?.parseSubData(),
         group = event?.getAsJsonObject("group_id")?.parseSubData(),
-        eventState = event?.getAsString("event_state"),
         price = event?.getAsString("price_display_string"),
-        communicationStrategy = event?.getAsString("communication_strategy"),
         applicableFilters = event?.getAsJsonArray("applicable_filters")?.parseApplicableFilters(),
         popularityScore = event?.getAsFloat("popularity_score"),
         minPrice = event?.getAsInt("min_price")
@@ -108,17 +129,13 @@ fun JsonArray.parseFeatured(): List<Event> = mapNotNull {
         slug = event?.getAsString("slug"),
         horizontalCover = event?.getAsString("horizontal_cover_image"),
         verticalCover = event?.getAsString("vertical_cover_image"),
-        city = event?.getAsString("city"),
         venueId = event?.getAsString("venue_id"),
         venueName = event?.getAsString("venue_name"),
         venueDate = event?.getAsString("venue_date_string"),
         venueLocation = event?.getAsJsonObject("venue_geolocation")?.parseLocation(),
-        isRsvp = event?.getAsBoolean("is_rsvp"),
         category = event?.getAsJsonObject("category_id")?.parseSubData(),
         group = event?.getAsJsonObject("group_id")?.parseSubData(),
-        eventState = event?.getAsString("event_state"),
         price = event?.getAsString("price_display_string"),
-        communicationStrategy = event?.getAsString("communication_strategy"),
         applicableFilters = event?.getAsJsonArray("applicable_filters")?.parseApplicableFilters(),
         popularityScore = event?.getAsFloat("popularity_score"),
         minPrice = event?.getAsInt("min_price")
